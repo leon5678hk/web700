@@ -1,0 +1,120 @@
+
+			@import url('https://fonts.googleapis.com/css2?family=Agbalumo&family=Pacifico&display=swap');
+
+			.bg-light {
+				background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+			
+			.navbar {
+				position: fixed;
+				width: 100%;
+				top: 0;
+				left: 0;
+				z-index: 1000;
+			}
+	
+			.navbar-brand {
+				font-family: 'Pacifico', sans-serif;
+				color: #333;
+				text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+			}
+	
+			.navbar-light {
+				color: #444;
+				text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+			}
+	
+			.nav-link {
+				font-family: 'Agbalumo', sans-serif;
+				color: #555;
+			}
+	
+			.nav-link:hover {
+				color: #777;
+			}
+	
+			.nav-link.active {
+				font-weight: 700;
+			}
+			
+			body,
+			html {
+				margin: 0;
+				background: linear-gradient(to bottom, #e0e0e0, #a7a7a7);
+			}
+
+			.bg-image {
+				background-image: url("https://img.freepik.com/premium-photo/free-photo-abstract-space-wallpaper-background-dark-smoke-design_512300-1797.jpg?w=826");
+				background-color: #cccccc;
+				height: 500px;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+				position: relative;
+			}
+
+			.bg-text {
+				text-align: center;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				color: white;
+			}
+
+	
+			.btn-primary {
+				background-color: #007bff;
+				background: linear-gradient(to bottom, #007bff, #0056b3);
+				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+			}
+	
+			.btn-primary:hover {
+				background-color: #84c0ff;
+                background: linear-gradient(to bottom, #84c0ff, #4e739b);
+			}
+	
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+				width: 100%;
+				border: 1px solid #414141;
+			}
+	
+			th,
+			td {
+				text-align: left;
+				padding: 16px;
+			}
+	
+			table tr:nth-child(odd) td {
+				background-color: #f0f0f0;
+				background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+			}
+	
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				font-family: 'Agbalumo', sans-serif;
+				color: #333;
+				text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+			}
+	
+			a {
+				color: #007bff;
+			}
+	
+			a:hover {
+				color: #0056b3;
+			}
+	
+			legend {
+				padding: 10px 0;
+				font-family: 'Agbalumo', sans-serif;
+				color: #333;
+				text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+			}
