@@ -1,10 +1,11 @@
 /*********************************************************************************
-* WEB700 – Assignment 3
+* WEB700 – Assignment 4
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy.
 * No part of this assignment has been copied manually or electronically from any other source
 * (including web sites) or distributed to other students.
 *
-* Name: Pak Lun Lo Student ID: 154968226 Date: 10/16/2023
+* Name: Pak Lun Lo Student ID: 154968226 Date: 10/30/2023
+*Online (Cyclic) Link: https://calm-ruby-parrot-gown.cyclic.app/htmlDemo
 *
 ********************************************************************************/
 
