@@ -5,7 +5,7 @@
 * (including web sites) or distributed to other students.
 *
 * Name: Pak Lun Lo Student ID: 154968226 Date: 10/30/2023
-*Online (Cyclic) Link: https://calm-ruby-parrot-gown.cyclic.app/htmlDemo
+*Online (Cyclic) Link: https://calm-ruby-parrot-gown.cyclic.app/
 *
 ********************************************************************************/
 
