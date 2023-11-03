@@ -103,9 +103,10 @@ app.get("/courses", (req, res) => {
     }*/
 
 // Serve the addStudent.html page for adding new students
-app.get("/css", function (req, res) {
+/*app.get("/css", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/theme.css"));
-});
+});*/
+app.use(express.static('public'))
 
 app.get("/students/add", function (req, res) {
     res.sendFile(path.join(__dirname, "/views/addStudent.html"));
@@ -132,4 +133,3 @@ app.use((req, res) => {
     res.status(404).send("Page Not Foun");
 });
 /*app.listen(HTTP_PORT, ()=>{console.log("server listening on port: " + HTTP_PORT)});*/
-
