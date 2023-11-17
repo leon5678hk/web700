@@ -86,12 +86,10 @@ function getStudentByNum(num) {
 
 function addStudent(studentData) {
   return new Promise(function (resolve, reject) {
-    // Set TA to false if not defined
     studentData.TA = studentData.TA === undefined ? false : true;
     studentData.studentNum = dataCollection.students.length + 1;
-    // Set studentNum property based on the length of the students array
     const newStudent = {
-      "studentNum": studentData.studentNum, // Automatically generated
+      "studentNum": studentData.studentNum, 
       "firstName": studentData.firstName,
       "lastName": studentData.lastName,
       "email": studentData.email,
@@ -105,11 +103,9 @@ function addStudent(studentData) {
     
 
 
-    // Push the updated studentData onto the students array
     dataCollection.students.push(newStudent);
     
 
-    // Write the updated data back to students.json
     fs.writeFile('./data/students.json', JSON.stringify(dataCollection.students), (err) => {
       if (err) {
         reject(err);
@@ -122,11 +118,9 @@ function addStudent(studentData) {
 
 function updateStudent(studentNum, studentData) {
   return new Promise(function (resolve, reject) {
-    // Find the index of the student with the given studentNum
     const studentIndex = dataCollection.students.findIndex(s => s.studentNum === studentNum);
 
     if (studentIndex !== -1) {
-      // Update the student data
       dataCollection.students[studentIndex].firstName = studentData.firstName;
       dataCollection.students[studentIndex].lastName = studentData.lastName;
       dataCollection.students[studentIndex].email = studentData.email;
@@ -137,7 +131,6 @@ function updateStudent(studentNum, studentData) {
       dataCollection.students[studentIndex].status = studentData.status;
       dataCollection.students[studentIndex].course = parseInt(studentData.course);
 
-      // Write the updated data back to students.json
       fs.writeFile('./data/students.json', JSON.stringify(dataCollection.students), (err) => {
         if (err) {
           reject(err);
