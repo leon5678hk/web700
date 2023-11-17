@@ -32,11 +32,14 @@
 	
 			.nav-link:hover {
 				color: #777;
+				
 			}
 	
-			.nav-link.active {
-				font-weight: 700;
+			.navbar-nav .nav-item .nav-link.active {
+				font-weight: bold;
 			}
+			
+
 			
 			body,
 			html {

@@ -1,0 +1,126 @@
+<div class="row">
+    <main class="col-md-12">
+        <br>
+        <h2>{{student.firstName}} {{student.lastName}} - Student: {{student.studentNum}}</h2>
+        <hr />
+        <form method="POST" action="/student/update/{{student.studentNum}}">
+            <fieldset>
+                <legend>Personal Information</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">First Name:</label>
+                            <input type="text" class="form-control" name="firstName" value="{{student.firstName}}" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Last Name:</label>
+                            <input type="text" class="form-control" name="lastName" value="{{student.lastName}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" name="email" value="{{student.email}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Address (Street):</label>
+                            <input type="text" class="form-control" name="addressStreet"
+                                value="{{student.addressStreet}}" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Address (City):</label>
+                            <input type="text" class="form-control" name="addressCity"
+                                value="{{student.addressCity}}" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Address (Province):</label>
+                            <input type="text" class="form-control" name="addressProvince"
+                                value="{{student.addressProvince}}" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Academic Information</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="mb-2">College Employment:</label>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="TA" name="TA" {{#if
+                                student.TA}}checked{{/if}} />
+                            <label class="form-check-label" for="TA">Teaching Assistant</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Enrollment Status:</label><br>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" id="fullTime" name="status"
+                                    value="Full Time" {{#equal student.status "Full Time" }}checked="checked"
+                                    {{/equal}} />
+                                <label class="form-check-label" for="fullTime">Full Time</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" id="partTime" name="status"
+                                    value="Part Time" {{#equal student.status "Part Time" }}checked="checked"
+                                    {{/equal}} />
+                                <label class="form-check-label" for="partTime">Part Time</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Enrolled in Course:</label>
+                            <select class="form-select" name="course">
+                                <option value="1" {{#equal student.course 1}}selected{{/equal}}>Relational Database
+                                    Design and Implementation</option>
+                                <option value="2" {{#equal student.course 2}}selected{{/equal}}>Java Programming
+                                </option>
+                                <option value="3" {{#equal student.course 3}}selected{{/equal}}>Introduction to Cloud
+                                    Computing</option>
+                                <option value="4" {{#equal student.course 4}}selected{{/equal}}>Database Administration
+                                    and Management</option>
+                                <option value="5" {{#equal student.course 5}}selected{{/equal}}>Web Programming</option>
+                                <option value="6" {{#equal student.course 6}}selected{{/equal}}>Applied Capstone Project
+                                </option>
+                                <option value="7" {{#equal student.course 7}}selected{{/equal}}>Database Connectivity
+                                    Using Java</option>
+                                <option value="8" {{#equal student.course 8}}selected{{/equal}}>Accessing Big Data
+                                </option>
+                                <option value="9" {{#equal student.course 9}}selected{{/equal}}>Datawarehousing</option>
+                                <option value="10" {{#equal student.course 10}}selected{{/equal}}>Security in Databases
+                                    and Web Applications</option>
+                                <option value="11" {{#equal student.course 11}}selected{{/equal}}>Work Term Preparation
+                                    (Work-Integrated Learning option only)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <hr>
+
+            <button type="submit" class="btn btn-primary float-end">Update Student</button>
+        </form>
+        {{#unless students}}
+        <div class="col-md-12 text-center">
+            <strong>{{message}}</strong>
+        </div>
+        {{/unless}}
+    </main>
+</div>

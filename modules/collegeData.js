@@ -103,6 +103,8 @@ function addStudent(studentData) {
       "course": parseInt(studentData.course)
     };
     
+
+
     // Push the updated studentData onto the students array
     dataCollection.students.push(newStudent);
     
@@ -118,6 +120,49 @@ function addStudent(studentData) {
   });
 }
 
+function updateStudent(studentNum, studentData) {
+  return new Promise(function (resolve, reject) {
+    // Find the index of the student with the given studentNum
+    const studentIndex = dataCollection.students.findIndex(s => s.studentNum === studentNum);
+
+    if (studentIndex !== -1) {
+      // Update the student data
+      dataCollection.students[studentIndex].firstName = studentData.firstName;
+      dataCollection.students[studentIndex].lastName = studentData.lastName;
+      dataCollection.students[studentIndex].email = studentData.email;
+      dataCollection.students[studentIndex].addressStreet = studentData.addressStreet;
+      dataCollection.students[studentIndex].addressCity = studentData.addressCity;
+      dataCollection.students[studentIndex].addressProvince = studentData.addressProvince;
+      dataCollection.students[studentIndex].TA = studentData.TA === undefined ? false : true;
+      dataCollection.students[studentIndex].status = studentData.status;
+      dataCollection.students[studentIndex].course = parseInt(studentData.course);
+
+      // Write the updated data back to students.json
+      fs.writeFile('./data/students.json', JSON.stringify(dataCollection.students), (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    } else {
+      reject("Student not found");
+    }
+  });
+}
+
+function getCourseById(courseId) {
+  return new Promise((resolve, reject) => {
+      const course = dataCollection.courses.find(c => c.courseId === courseId);
+
+      if (course) {
+          resolve(course);
+      } else {
+          reject("No course found with the specified ID");
+      }
+  });
+}
+
 module.exports = {
   initialize: initialize,
   getAllStudents: getAllStudents,
@@ -125,6 +170,8 @@ module.exports = {
   getCourses: getCourses,
   getStudentsByCourse: getStudentsByCourse,
   getStudentByNum: getStudentByNum,
-  addStudent: addStudent
+  addStudent: addStudent,
+  updateStudent: updateStudent,
+  getCourseById: getCourseById
 };
 
