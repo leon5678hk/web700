@@ -3,6 +3,8 @@
         <br>
         <h2>Courses</h2>
         <hr />
+
+
         {{#if courses.length}}
             <div class="table-responsive">
                 <table class="table">
@@ -10,23 +12,27 @@
                         <tr>
                             <th scope="col">Course Code</th>
                             <th scope="col">Course Description</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each courses}}
                             <tr>
-                                <td><a href="/course/{{this.courseId}}">{{this.courseCode}}</a></td>
-                                <td><a href="/students?course={{this.courseId}}">{{this.courseDescription}}</a></td>
+                                <td><a href="/course/{{courseId}}">{{courseCode}}</a></td>
+                                <td><a href="/students?course={{courseId}}">{{courseDescription}}</a></td>
+                                <td><a href="/course/delete/{{courseId}}" class="btn btn-danger">Remove</a></td>
+                            
                             </tr>
                         {{/each}}
                     </tbody>
                 </table>
             </div>
         {{else}}
-            <p>No courses available.</p>
+            <div class="col-md-12 text-center">
+                <strong>{{message}}</strong>
+            </div>
         {{/if}}
+                <a href="/courses/add" class="btn btn-success float-end">Add New Course</a>
+
     </div>
-</div>
-<div class="col-md-12 text-center">
-    <strong>{{message}}</strong>
 </div>

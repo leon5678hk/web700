@@ -1,10 +1,10 @@
 /*********************************************************************************
-* WEB700 – Assignment 5
+* WEB700 – Assignment 6
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy.
 * No part of this assignment has been copied manually or electronically from any other source
 * (including web sites) or distributed to other students.
 *
-* Name: Pak Lun Lo Student ID: 154968226 Date: 11/17/2023
+* Name: Pak Lun Lo Student ID: 154968226 Date: 12/2/2023
 *Online (Cyclic) Link: https://calm-ruby-parrot-gown.cyclic.app/
 *
 ********************************************************************************/
@@ -15,11 +15,12 @@ var HTTP_PORT = process.env.PORT || 8080;
 var express = require("express");
 const path = require('path');
 const exphbs = require('express-handlebars');
+const router = express.Router();
 var app = express();
 
 collegeData.initialize()
     .then(() => {
- 
+
         app.listen(HTTP_PORT, () => { console.log("server listening on port: " + HTTP_PORT) });
     })
     .catch((err) => {
@@ -27,32 +28,36 @@ collegeData.initialize()
         console.error("Initialization failed:", err);
     });
 
-    app.use(function(req, res, next) {
-        let route = req.path.substring(1);
-        app.locals.activeRoute = "/" + (isNaN(route.split('/')[1]) ? route.replace(/\/(?!.*)/, "") : route.replace(/\/(.*)/, ""));
-        next();
-    });
+app.use(function (req, res, next) {
+    let route = req.path.substring(1);
+    app.locals.activeRoute = "/" + (isNaN(route.split('/')[1]) ? route.replace(/\/(?!.*)/, "") : route.replace(/\/(.*)/, ""));
+    next();
+});
 
-    app.engine('.hbs', exphbs.engine({
-        extname: '.hbs',
-        defaultLayout: 'main',
-        layoutsDir: path.join(__dirname, 'views', 'layouts'),
-        helpers: {
-            navLink: function(url, options) {
-                return `<li class="nav-item">
-                            <a class="nav-link ${url == app.locals.activeRoute ? "active" : "" }" href="${url}">${options.fn(this)}</a>
+app.engine('.hbs', exphbs.engine({
+    extname: '.hbs',
+    defaultLayout: 'main',
+    layoutsDir: path.join(__dirname, 'views', 'layouts'),
+    helpers: {
+        navLink: function (url, options) {
+            return `<li class="nav-item">
+                            <a class="nav-link ${url == app.locals.activeRoute ? "active" : ""}" href="${url}">${options.fn(this)}</a>
                         </li>`;
-            },
-            equal: function(lvalue, rvalue, options) {
-                if (arguments.length < 3) throw new Error("Handlebars Helper equal needs 2 parameters");
-                if (lvalue != rvalue) {
-                    return options.inverse(this);
-                } else {
-                    return options.fn(this);
-                }
+        },
+        equal: function (lvalue, rvalue, options) {
+            if (arguments.length < 3) throw new Error("Handlebars Helper equal needs 2 parameters");
+            if (lvalue != rvalue) {
+                return options.inverse(this);
+            } else {
+                return options.fn(this);
             }
+        },
+
+        eq: function (a, b, options) {
+            return a === b ? options.fn(this) : options.inverse(this);
         }
-    }));
+    }
+}));
 
 app.get("/", function (req, res) {
     res.render("home");
@@ -72,12 +77,12 @@ app.get("/students", async (req, res) => {
     try {
         if (courseParam) {
             const studentsInCourse = await collegeData.getStudentsByCourse(parseInt(courseParam));
-            res.render("students", { students: studentsInCourse });
+            renderStudentsView(res, studentsInCourse);
         } else {
             const allStudents = await collegeData.getAllStudents();
 
             if (allStudents.length > 0) {
-                res.render("students", { students: allStudents });
+                renderStudentsView(res, allStudents);
             } else {
                 res.render("students", { message: "No results" });
             }
@@ -87,15 +92,36 @@ app.get("/students", async (req, res) => {
     }
 });
 
-app.get("/student/:num", async (req, res) => {
-    const studentNum = parseInt(req.params.num);
-
-    try {
-        const student = await collegeData.getStudentByNum(studentNum);
-        res.render("student", { student });
-    } catch (error) {
-        res.status(500).json(error);
+function renderStudentsView(res, students) {
+    if (students.length > 0) {
+        res.render("students", { students: students });
+    } else {
+        res.render("students", { message: "No results" });
     }
+}
+
+app.get("/student/:studentNum", (req, res) => {
+    collegeData.getStudentByNum(req.params.studentNum)
+        .then((studentData) => {
+            if (studentData) {
+                const student = studentData[0]; 
+                collegeData.getCourses()
+                    .then((courseData) => {
+                        const courses = courseData || [];
+                        res.render("student", { student, courses });
+                    })
+                    .catch((err) => {
+                        console.error("Error fetching courses:", err);
+                        res.status(500).send("Internal Server Error");
+                    });
+            } else {
+                res.render("student", { student: null, courses: [] });
+            }
+        })
+        .catch((err) => {
+            console.error("Error fetching student:", err);
+            res.status(500).send("Internal Server Error");
+        });
 });
 
 /*app.get("/tas", (req, res) => {
@@ -109,29 +135,30 @@ app.get("/student/:num", async (req, res) => {
         });
 });*/
 
-app.get("/courses", async (req, res) => {
-    try {
-        const allCourses = await collegeData.getCourses();
-
-        if (allCourses.length > 0) {
-            res.render("courses", { courses: allCourses });
-        } else {
-            res.render("courses", { message: "no results" });
-        }
-    } catch (error) {
-        res.status(500).render("courses", { message: "no results" });
-    }
+app.get("/courses", (req, res) => {
+    collegeData.getCourses()
+        .then((allCourses) => {
+            if (allCourses.length > 0) {
+                res.render("courses", { courses: allCourses });
+            } else {
+                res.render("courses", { message: "No results" });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            res.status(500).render("courses", { message: "No results" });
+        });
 });
 
 
 
-    /*try {
-        const student = await collegeData.getStudentByNum(parseInt(studentNum));
-        res.json(student);
-        
-    } catch (error) {
-        res.status(500).json(error);
-    }*/
+/*try {
+    const student = await collegeData.getStudentByNum(parseInt(studentNum));
+    res.json(student);
+    
+} catch (error) {
+    res.status(500).json(error);
+}*/
 
 // Serve the addStudent.html page for adding new students
 /*app.get("/css", function (req, res) {
@@ -139,26 +166,34 @@ app.get("/courses", async (req, res) => {
 });*/
 app.use(express.static('public'))
 
-app.get("/students/add", function (req, res) {
-    res.render("addStudent"); 
+app.get("/students/add", (req, res) => {
+    collegeData.getCourses()
+        .then((courses) => {
+            res.render("addStudent", { courses });
+        })
+        .catch((error) => {
+            console.error("Error fetching courses:", error);
+            res.status(500).send("Internal Server Error");
+        });
 });
 
-app.use(express.urlencoded({ extended: false })); 
-app.use(express.json()); 
 
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.post("/students/add", (req, res) => {
-    const studentData = req.body; 
+    const studentData = req.body;
 
-    collegeData.addStudent(studentData) 
+    collegeData.addStudent(studentData)
         .then(() => {
-          
-            res.redirect("/students"); 
+            res.redirect("/students");
         })
         .catch((error) => {
             res.status(500).json(error);
         });
 });
+
 
 app.post("/student/update/:num", async (req, res) => {
     const studentNum = parseInt(req.params.num);
@@ -178,17 +213,68 @@ app.post("/student/update/:num", async (req, res) => {
     }
 });
 
-app.get("/course/:id", async (req, res) => {
-    const courseId = parseInt(req.params.id);
+app.get("/students/delete/:studentNum", async (req, res) => {
+    try {
+        await collegeData.deleteStudentByNum(req.params.studentNum);
+        res.redirect("/students");
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+
+
+app.get("/courses/add", function (req, res) {
+    res.render("addCourse");
+});
+
+app.post("/courses/add", async (req, res) => {
+    const courseData = req.body;
 
     try {
-        const course = await collegeData.getCourseById(courseId);
-        res.render("course", { course });
+        await collegeData.addCourse(courseData);
+        res.redirect("/courses");
     } catch (error) {
         res.status(500).json(error);
     }
 });
 
+
+app.post("/course/update/:id", async (req, res) => {
+    const courseId = parseInt(req.params.id);
+    const updatedCourseData = req.body;
+
+    try {
+        await collegeData.updateCourse(updatedCourseData);
+        res.redirect("/courses");
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+app.get("/course/:id", (req, res) => {
+    const courseId = parseInt(req.params.id);
+    collegeData.getCourseById(courseId)
+        .then((courseData) => {
+            const course = courseData[0];
+            console.log("Fetched course data:", course);
+            res.render("course", { course });
+        })
+        .catch((error) => {
+            console.error("Error fetching course:", error);
+            res.status(500).json(error);
+        });
+});
+
+
+app.get("/course/delete/:id", async (req, res) => {
+    try {
+        await collegeData.deleteCourseById(req.params.id);
+        res.redirect("/courses");
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 app.set('view engine', '.hbs');
 
